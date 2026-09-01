@@ -1,0 +1,39 @@
+title DSS - Data Set Search POC
+
+Dev [icon: user, label: "Developer"]
+
+Account [icon: aws-account, label: "AWS Account 654654174755 us-east-1"] {
+
+  Bucket [icon: aws-simple-storage-service, label: "S3 dss-poc-data-654654174755"] {
+    Datasets [icon: aws-simple-storage-service, label: "datasets prefix"]
+    Mapping [icon: aws-simple-storage-service, label: "config index-mapping.json"]
+  }
+
+  Vpc [icon: aws-vpc, label: "VPC vpc-0cc399d64dcb27754"] {
+    S3Endpoint [icon: aws-endpoints, label: "S3 Gateway Endpoint"]
+    Nat [icon: aws-nat-gateway, label: "NAT Gateway"]
+
+    Subnet [icon: aws-private-subnet, label: "Private subnet 10.13.0.0/28"] {
+      Ingest [icon: aws-lambda, label: "dss-poc-ingest"]
+      Query [icon: aws-lambda, label: "dss-poc-query"]
+      Search [icon: aws-opensearch-service, label: "dss-poc domain"]
+    }
+  }
+
+  Secrets [icon: aws-secrets-manager, label: "dss-poc-master-user"]
+  Logs [icon: aws-cloudwatch, label: "CloudWatch Logs"]
+  Dlq [icon: aws-simple-queue-service, label: "dss-poc-ingest-dlq"]
+}
+
+Dev > Datasets: 1 upload JSON
+Datasets > Ingest: 2 ObjectCreated
+Ingest > S3Endpoint: 3 read object
+S3Endpoint > Datasets
+S3Endpoint > Mapping: 4 read mapping
+Ingest > Nat: 5 credentials
+Nat > Secrets
+Ingest > Search: 6 bulk index
+Ingest > Logs: 7 run summary
+Ingest --> Dlq: failures
+Dev > Query: invoke
+Query > Search: forwarded search

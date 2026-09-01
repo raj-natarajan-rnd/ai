@@ -1,0 +1,12 @@
+{
+  "settings": { "number_of_shards": 1, "number_of_replicas": 0 },
+  "mappings": {
+    "properties": {
+      "id":         { "type": "keyword" },
+      "name":       { "type": "text", "fields": { "keyword": { "type": "keyword" } } },
+      "price":      { "type": "double" },
+      "inStock":    { "type": "boolean" },
+      "source_key": { "type": "keyword" }
+    }
+  }
+}

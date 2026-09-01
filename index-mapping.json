@@ -1,0 +1,108 @@
+{
+  "settings": {
+    "number_of_shards": 1,
+    "number_of_replicas": 0,
+    "analysis": {
+      "normalizer": {
+        "lc": {
+          "type": "custom",
+          "filter": [
+            "lowercase",
+            "trim"
+          ]
+        }
+      },
+      "filter": {
+        "DSS_synonyms": {
+          "type": "synonym",
+          "synonyms": [
+            "client,customer",
+            "gl,general ledger",
+            "fnol,first notice of loss",
+            "premium,contribution"
+          ]
+        }
+      },
+      "analyzer": {
+        "DSS_text": {
+          "type": "custom",
+          "tokenizer": "standard",
+          "filter": [
+            "lowercase",
+            "DSS_synonyms",
+            "stop",
+            "porter_stem"
+          ]
+        }
+      }
+    }
+  },
+  "mappings": {
+    "properties": {
+      "name": {
+        "type": "text",
+        "analyzer": "DSS_text",
+        "fields": {
+          "exact": {
+            "type": "keyword",
+            "normalizer": "lc"
+          }
+        }
+      },
+      "display_name": {
+        "type": "text",
+        "analyzer": "DSS_text"
+      },
+      "description": {
+        "type": "text",
+        "analyzer": "DSS_text"
+      },
+      "columns": {
+        "type": "text",
+        "analyzer": "DSS_text"
+      },
+      "domain": {
+        "type": "keyword"
+      },
+      "owner": {
+        "type": "keyword"
+      },
+      "owning_team": {
+        "type": "keyword"
+      },
+      "classification": {
+        "type": "keyword"
+      },
+      "file_format": {
+        "type": "keyword"
+      },
+      "source_system": {
+        "type": "keyword"
+      },
+      "lifecycle_state": {
+        "type": "keyword"
+      },
+      "tags": {
+        "type": "keyword"
+      },
+      "source_key": {
+        "type": "keyword"
+      },
+      "row_count": {
+        "type": "long"
+      },
+      "column_count": {
+        "type": "integer"
+      },
+      "size_bytes": {
+        "type": "long"
+      },
+      "completeness_pct": {
+        "type": "double"
+      },
+      "updated": {
+        "type": "date"
+      }
+    }
+  }
+}
